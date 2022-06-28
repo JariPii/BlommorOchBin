@@ -3,6 +3,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Picker, onOpen } from 'react-native-actions-sheet-picker';
 
+import DisplayMaterial from './components/DisplayMaterial';
+
 /*
  **Example data:
  */
@@ -40,23 +42,25 @@ export default function App() {
     setQuery(text);
   };
 
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          onOpen('country');
+          onOpen('material');
         }}
       >
         <Text>Open ActionSheet</Text>
       </TouchableOpacity>
+      <DisplayMaterial selected={selected} />
       <Text style={{ padding: 10 }}>Chosen : {JSON.stringify(selected)}</Text>
       <Picker
-        id="country"
+        id="material"
         data={filteredData}
         inputValue={query}
         searchable={true}
-        label="Select Country"
+        label="Select Material"
         setSelected={setSelected}
         onSearch={onSearch}
       />
