@@ -1,82 +1,47 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SearchInfoScreen from './screens/SearchInfoScreen';
+import MainScreen from './screens/MainScreen';
+import SavedList from './screens/SavedList';
+import { useEffect } from 'react';
+import { getTableInfo, initDB } from './database/DbUtils';
 
-import { StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Picker, onOpen } from 'react-native-actions-sheet-picker';
 
-import DisplayMaterial from './components/DisplayMaterial';
-
-/*
- **Example data:
- */
-import countries from './materials/countries.json';
-import materials from './materials/materials.json';
 
 export default function App() {
-  const [data, setData] = useState([]);
-  const [selected, setSelected] = useState(undefined);
-  const [query, setQuery] = useState('');
+
+  const NativeStack = createNativeStackNavigator()
 
   useEffect(() => {
-    setData(materials);
-  }, []);
+    initDB()
+      .then(res => {
+        console.log("result from init", res)
+        return getTableInfo()
+      })
+      .then(res => console.log("pragma table_info", res))
+      .catch(err => console.log(err))
+  }, [])
 
-  /*
-   **Example filter function
-   * @param {string} filter
-   */
-  const filteredData = useMemo(() => {
-    if (data && data.length > 0) {
-      return data.filter((item) =>
-        item.name
-          .toLocaleLowerCase('en')
-          .includes(query.toLocaleLowerCase('en'))
-      );
-    }
-  }, [data, query]);
+    
 
-  /*
-   **Input search
-   *@param {string} text
-   */
-  const onSearch = (text) => {
-    setQuery(text);
-  };
+  
 
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          onOpen('material');
-        }}
-      >
-        <Text>Open ActionSheet</Text>
-      </TouchableOpacity>
-      <DisplayMaterial selected={selected} />
-      <Text style={{ padding: 10 }}>Chosen : {JSON.stringify(selected)}</Text>
-      <Picker
-        id="material"
-        data={filteredData}
-        inputValue={query}
-        searchable={true}
-        label="Select Material"
-        setSelected={setSelected}
-        onSearch={onSearch}
-      />
-    </SafeAreaView>
-  );
+  return(
+    <NavigationContainer>
+      <NativeStack.Navigator>
+      <NativeStack.Screen
+          name="Main"
+          component={MainScreen}
+        />
+        <NativeStack.Screen
+          name="Search"
+          component={SearchInfoScreen}
+        />
+        <NativeStack.Screen
+          name="SavedList"
+          component={SavedList}
+        />
+      </NativeStack.Navigator>
+    </NavigationContainer>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#8B93A5',
-    padding: 10,
-    borderRadius: 6,
-    marginTop: 50,
-  },
-});
