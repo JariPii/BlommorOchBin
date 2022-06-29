@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-
+import { findAll, insert } from "../database/DbUtils"
 import { StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Picker, onOpen } from 'react-native-actions-sheet-picker';
 
@@ -7,7 +7,7 @@ import DisplayMaterial from '../components/DisplayMaterial';
 
 import materials from '../materials/materials.json';
 
-export default function MainScreen({ navigation }) {
+const MainScreen = ({ navigation }) =>  {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(undefined);
   const [query, setQuery] = useState('');
@@ -84,3 +84,5 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
 });
+
+export default MainScreen;

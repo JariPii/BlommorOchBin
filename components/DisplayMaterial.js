@@ -6,7 +6,7 @@ import React, { useState } from "react"
 
 export default function DisplayMaterial({ selected ,navigation}) {
 
-    console.log(selected.name + " this is seleleselsels")
+    console.log("this is seleleselsels")
 
     const [list, setList] = useState([])
 
@@ -20,10 +20,10 @@ export default function DisplayMaterial({ selected ,navigation}) {
 
         console.log("gets to dispasldaspdaskdasiteitmetietm")
          findAll()
-                    .then(res => setList(res))
+                    .then(res => console.log(res))
                     .catch(err => console.log(err))
         
-
+        console.log(list)
         return(
             <FlatList 
                 data={list}
@@ -34,15 +34,17 @@ export default function DisplayMaterial({ selected ,navigation}) {
     }
 
     const addToList = () => {
-        const item = new Item(0, selected.name, selected.value, false)
-
+        const item = new Item(0, selected.name, selected.key_l, false)
+        console.log(item, " item")
         insert(item)
         .then(res => {
             console.log("inster ---- jari kan stava, men inte anton res", res)
             return findAll()
         })
         .then(res => setList(res))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err, " this what im looking for"))
+
+        console.log(list, " ++++++++++++++++++++++++++++++++++++++++")
     }
 
     if (selected)
@@ -55,7 +57,9 @@ export default function DisplayMaterial({ selected ,navigation}) {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        navigation.navigate('Search')
+                        navigation.navigate('Search', {
+                            selected,
+                        })
 
                     }}
                 >
@@ -65,7 +69,11 @@ export default function DisplayMaterial({ selected ,navigation}) {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={displayItems}
+                    onPress={() => {
+                        navigation.navigate('List',{
+                            list
+                        })
+                    }}
                 >
                     <Text>Show List</Text>
                 </TouchableOpacity>

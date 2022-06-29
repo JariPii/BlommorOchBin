@@ -1,79 +1,31 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { Text, FlatList,View } from "react-native"
+import { useState } from "react"
 
-import { StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Picker, onOpen } from 'react-native-actions-sheet-picker';
+export default function SearchInfoScreen(selected){
+  
+  console.log(selected.route.params.selected.name, "--------------------")
+  const [item, setItem] = useState(selected.route.params.selected)
 
-import DisplayMaterial from '../components/DisplayMaterial';
-
-
-import materials from '../materials/materials.json';
-
-export default function SearchInfoScreen() {
-  const [data, setData] = useState([]);
-  const [selected, setSelected] = useState();
-  const [query, setQuery] = useState('');
-
-  const handleSetSelected = (item) => {setSelected(item)}
-
-  useEffect(() => {
-    setData(materials);
-  }, []);
-
-  /*
-   **Example filter function
-   * @param {string} filter
-   */
-  const filteredData = useMemo(() => {
-    if (data && data.length > 0) {
-      return data.filter((item) =>
-        item.name
-          .toLocaleLowerCase('en')
-          .includes(query.toLocaleLowerCase('en'))
-      );
-    }
-  }, [data, query]);
-
-  /* displayMaterial körs innan selected har värde, fixa din jävel
-   */
-  const onSearch = (text) => {
-    setQuery(text);
-  };
-
-
-  return (
-    <SafeAreaView style={styles.container}>
-        <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          onOpen('country');
-        }}
-      >
-        <Text>Open ActionSheet</Text>
-      </TouchableOpacity>
-      <DisplayMaterial selected={selected}/>
-      <Text style={{ padding: 10 }}>Chosen : {JSON.stringify(selected)}</Text>
-      <Picker
-        id="material"
-        data={filteredData}
-        inputValue={query}
-        searchable={true}
-        label="Select Material"
-        setSelected={handleSetSelected}
-        onSearch={onSearch}
-      />
-    </SafeAreaView>
-  );
+  //funktion för att hämta namn utan bindesträck
+  
+  const renderItems = ({item}) => {
+    return(
+      <View>
+      <Text>{item[0]}</Text>
+      <Text>{item[1]}</Text>      
+      </View>
+    )
+  }
+  
+  return (  
+    <View>
+    <Text>{item.name}</Text>
+    <FlatList 
+      data={item.value}
+      renderItem={renderItems}
+      keyExtractor={(item,index) => index.toString()}
+    />
+    <Text>Crafting time: {item.time} seconds</Text>
+    </View>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#8B93A5',
-    padding: 10,
-    borderRadius: 6,
-    marginTop: 50,
-  },
-});

@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import Item from '../models/ItemInfo';
 
-const db = SQLite.openDatabase("ListedItems.db");
+const db = SQLite.openDatabase("listsdb.db");
 
 export const initDB = () => {
 
@@ -41,7 +41,7 @@ export const getTableInfo = () => {
 
 export const insert = (item) => {
 
-    console.log(item.name + "<-------item")
+    // console.log(item.name + "<-------item")
 
     return new Promise((resolve, reject) => {
 

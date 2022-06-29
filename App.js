@@ -10,7 +10,7 @@ import { getTableInfo, initDB } from './database/DbUtils';
 
 export default function App() {
 
-  const NativeStack = createNativeStackNavigator()
+  
 
   useEffect(() => {
     initDB()
@@ -23,7 +23,7 @@ export default function App() {
   }, [])
 
     
-
+  const NativeStack = createNativeStackNavigator()
   
 
   return(
@@ -38,7 +38,7 @@ export default function App() {
           component={SearchInfoScreen}
         />
         <NativeStack.Screen
-          name="SavedList"
+          name="List"
           component={SavedList}
         />
       </NativeStack.Navigator>
