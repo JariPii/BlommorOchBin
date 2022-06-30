@@ -1,5 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 import Item from '../models/ItemInfo';
+import React from 'react';
 
 const db = SQLite.openDatabase("listsdb.db");
 
