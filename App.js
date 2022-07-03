@@ -1,13 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SearchInfoScreen from './screens/SearchInfoScreen';
 import MainScreen from './screens/MainScreen';
 import SavedList from './screens/SavedList';
 import { useEffect } from 'react';
 import { getTableInfo, initDB } from './database/DbUtils';
 import React from 'react';
-// import { FontAwesome } from '@expo/vector-icons'
 
 
 
@@ -26,19 +25,21 @@ export default function App() {
   }, [])
 
     
-  const NativeStack = createNativeStackNavigator()
-
+  const NativeStack = createNativeStackNavigator();
   
 
+
   return(
+
+    
     <NavigationContainer>
       <NativeStack.Navigator>
       <NativeStack.Screen
-          name="Main"
+          name="Satisfactory"
           component={MainScreen}
         />
         <NativeStack.Screen
-          name="Search"
+          name="Item info"
           component={SearchInfoScreen}
         />
         <NativeStack.Screen
@@ -50,4 +51,10 @@ export default function App() {
 
 
   )
+
+
+
+  
+
 }
+

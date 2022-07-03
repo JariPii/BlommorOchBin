@@ -6,26 +6,23 @@ import React, { useState } from "react"
 
 export default function DisplayMaterial({ selected ,navigation}) {
 
-    console.log("this is seleleselsels")
-
     const [list, setList] = useState([])
 
     const renderListItems = ({item: material}) => {
         return(
-        <Text>{material.name}</Text>
+        <Text style={{backgroundColor: 'red'}} >{material.name}</Text>
         )
     }
     
     const displayItems= () => {
 
-        console.log("gets to dispasldaspdaskdasiteitmetietm")
          findAll()
                     .then(res => console.log(res))
                     .catch(err => console.log(err))
         
         console.log(list)
         return(
-            <FlatList 
+            <FlatList
                 data={list}
                 renderItem={renderListItems}
                 keyExtractor={(item,index) => index.toString()}
@@ -38,13 +35,11 @@ export default function DisplayMaterial({ selected ,navigation}) {
         console.log(item, " item")
         insert(item)
         .then(res => {
-            console.log("inster ---- jari kan stava, men inte anton res", res)
+            console.log(res)
             return findAll()
         })
         .then(res => setList(res))
         .catch(err => console.log(err, " this what im looking for"))
-
-        console.log(list, " ++++++++++++++++++++++++++++++++++++++++")
     }
 
     if (selected)
@@ -52,12 +47,14 @@ export default function DisplayMaterial({ selected ,navigation}) {
 
         return (
             <View style={styles.test}>
-                <Text>{selected.name}</Text>
+                <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10 }}>
+                <Text style={{color: 'white', fontSize: 18}}>{selected.name}</Text>
+                </View>
                 <View style={styles.buttonRow}>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        navigation.navigate('Search', {
+                        navigation.navigate('Item info', {
                             selected,
                         })
 

@@ -1,6 +1,6 @@
-import { Text, View, FlatList, Pressable } from "react-native"
+import { Text, View, FlatList, Pressable, StyleSheet, Dimensions, ImageBackground } from "react-native"
 import { findAll, deleteById } from "../database/DbUtils"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react" 
 
 export default function SavedList({list}){
    const [savedList, setSavedList] = useState()
@@ -14,7 +14,6 @@ export default function SavedList({list}){
 
     const deleteItem = (item) => {
 
-        console.log(item, " this is item in delete item ")
         deleteById(item).then(
             findAll()
                 .then(res => setSavedList(res))
@@ -24,21 +23,57 @@ export default function SavedList({list}){
 
     const renderItems = ({item}) =>{
         return(
-            <View>
-                <Text>{item.name}</Text>
-                <Pressable onPress={() => deleteItem(item.id)}>
-                    <Text>Delete  {"\n"}</Text>
+            <View style={styles.itemSaved}>
+                <Text style={styles.textField} >{item.name}</Text>
+                <Pressable
+                style={styles.button}
+                onPress={() => deleteItem(item.id)}>
+                    <Text style={{ fontWeight: 'bold' }} >X </Text>
                 </Pressable>
             </View>
         )
     }
 
     return(
+        <ImageBackground
+                source={require('../assets/IndexBackground.jpg')}
+                resizeMode='stretch'
+                style={styles.imagebackground}
+            >
+        <View style={{borderWidth: 1, borderColor: 'black', marginTop: 55}} >
         <FlatList 
             data={savedList}
             renderItem={renderItems}
             keyExtractor={(item, index) => index.toString()}
         />
+        </View>
+        </ImageBackground>
    
     )
-    }   
+    }
+
+    const styles = StyleSheet.create ({
+        itemSaved: {
+            flex: 1, 
+            flexDirection: 'row',
+            margin: 5,
+        },
+        textField: {
+            width: '90%',
+            backgroundColor: 'white'
+        },
+        button: {
+            width: '10%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: 1,
+            borderRadius: 5,
+            backgroundColor: 'grey'
+        },
+        imagebackground: {
+          height: '100%',
+          width: Dimensions.get('window').width,
+          alignItems: 'center',
+          justifyContent: 'center',
+      },
+    })

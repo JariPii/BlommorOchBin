@@ -1,16 +1,11 @@
-import { Text, FlatList,View, StyleSheet } from "react-native"
+import { Text, FlatList,View, StyleSheet, ImageBackground, Dimensions } from "react-native"
 import React, { useState } from "react"
 import materials from '../materials/materials.json'
 
 
 export default function SearchInfoScreen(selected){
   
-  console.log(selected.route.params.selected.name, "--------------------")
   const [item, setItem] = useState(selected.route.params.selected)
-
-  //funktion för att hämta namn utan bindesträck
-  
-
  
 
   const getItems = () => {
@@ -22,40 +17,55 @@ export default function SearchInfoScreen(selected){
     return newItems;
   }
 
-  const renderItems = ({item: recipe}) => {
-    console.log(recipe, " this should nb namer")
-    
+  const renderItems = ({item: recipe}) => {    
     
     return(
       <View>        
-      <Text> {recipe.amount} {recipe.name[0].name}</Text>
+      <Text style={styles.text} > {recipe.amount} {recipe.name[0].name}</Text>
       </View>
+      
     )
   }
   
   return (  
     <View>
-      <View  >
-        <Text >{item.name} {"\n"} </Text>
+      <ImageBackground
+        source={require('../assets/IndexBackground.jpg')}
+        resizeMode='stretch'
+        style={styles.imagebackground}
+      >
+      <View style={styles.main} >
+        <Text style={{fontWeight: 'bold', fontSize: 20, color: 'white'}} >{item.name} {"\n"} </Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'white' }} >Materials needed {"\n"} </Text>
+          <View style={{height: '30%'}} >
+            <FlatList
+              data={getItems()}
+              renderItem={renderItems}
+              keyExtractor={(item,index) => index.toString()}
+            />
+          </View>
+        <Text style={styles.text}> {"\n"} Crafting time: <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>{item.time}</Text> seconds</Text>
       </View>
-    <Text style={{ fontWeight: 'bold', fontSize: 18 }} >Materials needed {"\n"} </Text>
-    <FlatList 
-      data={getItems()}
-      renderItem={renderItems}
-      keyExtractor={(item,index) => index.toString()}
-    />
-    <Text> {"\n"} Crafting time: {item.time} seconds</Text>
+      </ImageBackground>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flex: 1, 
-    alignContent: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'black',
-    height: "25%"
+  main: {
+    height: '50%',
+    width: 'auto' ,
+    color: 'white',
+    alignItems: 'center'
   },
+  imagebackground: {
+    height: '100%',
+    width: Dimensions.get('window').width,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'white'
+  }
+
 })
