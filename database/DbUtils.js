@@ -14,10 +14,11 @@ export const initDB = () => {
                     id INTEGER PRIMARY KEY NOT NULL,
                     name TEXT NOT NULL,
                     madeOf TEXT NOT NULL,
+                    amount INTEGER NOT NULL,
                     completed BOOLEAN NOT NULL
                 )`, [],
                 (tx, res) => resolve(res),
-                (tx, err) => reject(err) 
+                (tx, err) => reject(err)
             )
         })
     })
@@ -44,12 +45,19 @@ export const insert = (item) => {
 
     // console.log(item.name + "<-------item")
 
+
     return new Promise((resolve, reject) => {
 
         db.transaction((transaction) => {
+            //     transaction.executeSql(
+            //         `DROP TABLE list`,
+            //         (tx, res) => resolve(res),
+            //         (tx, err) => reject(err)
+            //     )
+
             transaction.executeSql(
-                `INSERT INTO list (name, madeOf, completed)
-                VALUES (?, ?, ?)`, [item.name, item.madeOf, item.completed],
+                `INSERT INTO list (name, madeOf, amount,completed)
+                VALUES (?, ?, ?, ?)`, [item.name, item.madeOf, item.amount, item.completed],
                 (tx, res) => resolve(res),
                 (tx, err) => reject(err)
             )
@@ -67,13 +75,27 @@ export const findAll = () => {
                 `SELECT * FROM list`, [],
                 (tx, res) => resolve(
                     res.rows._array
-                        .map(item => new Item(item.id, item.name, item.madeOf, item.completed === 1))
+                        .map(item => new Item(item.id, item.name, item.madeOf, item.amount, item.completed === 1))
                 ),
                 (tx, err) => reject(err)
             )
         })
 
     })
+}
+
+export const findById = (madeOf) => {
+
+    return new Promise((resolve, reject) => {
+        db.transaction((transaction) => {
+            transaction.executeSql(
+                `SELECT * FROM list WHERE madeOf = ?`, [madeOf], [],
+                (tx, res) => resolve(res),
+                (tx, err) => reject(err)
+            )
+        })
+    })
+
 }
 
 export const deleteById = (id) => {
@@ -90,4 +112,24 @@ export const deleteById = (id) => {
 
     })
 
+}
+
+export const increaseAmount = (id) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((transaction) => {
+            transaction.executeSql(
+                `SELECT * FROM list WHERE id = ?`, [id],
+                (tx, res) => resolve(
+                    console.log(res.rows._array[0], " this"),
+                    transaction.executeSql(`
+                        UPDATE list SET amount = ?`, [res.rows._array[0].amount + 1])
+                )
+                ,
+                (tx, err) => reject(err))
+
+
+        }
+        )
+    }
+    )
 }
